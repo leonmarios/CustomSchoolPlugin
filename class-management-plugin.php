@@ -2,7 +2,7 @@
 /*
  Plugin Name: Class Management Plugin
  Description: A plugin to manage classes, students, and schedules in WordPress.
- Version: 3.0
+ Version: 4.0
  Author: Marios Leon
 */
 
@@ -18,7 +18,7 @@ define('CMP_PLUGIN_URL', plugin_dir_url(__FILE__));
 // Include feature files
 require_once CMP_PLUGIN_DIR . 'includes/db-tables.php';
 require_once CMP_PLUGIN_DIR . 'includes/create-class.php';
-require_once CMP_PLUGIN_DIR . 'includes/edit-schedule.php';
+require_once CMP_PLUGIN_DIR . 'includes/edit-class.php';
 require_once CMP_PLUGIN_DIR . 'includes/delete-class.php';
 require_once CMP_PLUGIN_DIR . 'includes/helper-functions.php';
 require_once CMP_PLUGIN_DIR . 'includes/create-user.php';
