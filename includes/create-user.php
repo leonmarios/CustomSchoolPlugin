@@ -1,23 +1,25 @@
 <?php
-function create_user_form() {
-    // Handle form submission
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_user'])) {
+class CreateUser {
+    public static function create_user_form() {
         global $wpdb;
 
-        // Sanitize and save the submitted data
-        $data = [];
-        foreach ($_POST as $key => $value) {
-            $data[$key] = is_array($value) ? array_map('sanitize_text_field', $value) : sanitize_text_field($value);
+        // Form submission handling
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_user'])) {
+            $data = [
+                'name' => sanitize_text_field($_POST['name']),
+                'email' => sanitize_email($_POST['email']),
+                'class_id' => intval($_POST['class_id']),
+            ];
+
+            $wpdb->insert($wpdb->prefix . 'users', $data);
+            echo '<p>User created successfully!</p>';
         }
 
-        // Add logic to insert data into your database table
-        $wpdb->insert($wpdb->prefix . 'users', $data);
+        // Fetch classes for dropdown
+        $classes = $wpdb->get_results("SELECT id, name FROM {$wpdb->prefix}classes");
 
-        echo '<p>User created successfully!</p>';
-    }
-
-    // Render the form
-    ?>
+        // Render the form
+        ?>
     <div id="user-form">
         <ul class="tabs">
             <li><a href="#section1">Κοινωνικό Ιστορικό</a></li>
@@ -387,6 +389,10 @@ function create_user_form() {
             });
         });
     </script>
-    <?php
+   
+ <?php
 }
+}
+add_shortcode('create_user_form', 'create_user_form');
 ?>
+
