@@ -8,9 +8,13 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
 """
 
 import os
+import sys
+
+path = '/home/leonmarios/CustomSchoolPlugin/PegkapCMP/ddccsm'
+if path not in sys.path:
+    sys.path.append(path)
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'ddccsm.settings.prod'
 
 from django.core.wsgi import get_wsgi_application
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ddccsm.settings.production')
-
 application = get_wsgi_application()

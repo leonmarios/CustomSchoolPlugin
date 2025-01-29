@@ -63,6 +63,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ddccsm.wsgi.application'
 
+# Database - will be overridden in dev/prod settings
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
