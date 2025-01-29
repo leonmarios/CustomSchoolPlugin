@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    {% if form.instance.pk %}
+        Επεξεργασία {{ form.instance.full_name }}
+    {% else %}
+        Νέος Ωφελούμενος
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title h5 mb-0">
+                    {% if form.instance.pk %}
+                        Επεξεργασία {{ form.instance.full_name }}
+                    {% else %}
+                        Νέος Ωφελούμενος
+                    {% endif %}
+                </h2>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    {% for section, fields in fields_by_section.items %}
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h3 class="h6 mb-0">{{ section|title }}</h3>
+                            </div>
+                            <div class="card-body">
+                                {% for field_name in fields %}
+                                    {{ form|get_field:field_name|as_crispy_field }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'learners:list' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Επιστροφή
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Αποθήκευση
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

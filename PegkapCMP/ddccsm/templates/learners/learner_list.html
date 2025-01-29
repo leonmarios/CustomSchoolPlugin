@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}Ωφελούμενοι{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="h4">{% trans "Ωφελούμενοι" %}</h2>
+        </div>
+        <div class="col text-end">
+            <a href="{% url 'learners:create' %}" class="btn btn-primary">
+                {% trans "Νέος Ωφελούμενος" %}
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <a href="?order_by=first_name&direction={% if current_order == 'first_name' and current_direction == 'asc' %}desc{% else %}asc{% endif %}" class="text-dark">
+                                    Φάκελος
+                                    {% if current_order == 'first_name' %}
+                                        {% if current_direction == 'asc' %}↑{% else %}↓{% endif %}
+                                    {% endif %}
+                                </a>
+                            </th>
+                            <th>
+                                <a href="?order_by=class_assignment&direction={% if current_order == 'class_assignment' and current_direction == 'asc' %}desc{% else %}asc{% endif %}" class="text-dark">
+                                    Τμήμα
+                                    {% if current_order == 'class_assignment' %}
+                                        {% if current_direction == 'asc' %}↑{% else %}↓{% endif %}
+                                    {% endif %}
+                                </a>
+                            </th>
+                            <th>{% trans "Όνομα" %}</th>
+                            <th>{% trans "Επώνυμο" %}</th>
+                            <th>{% trans "Κατάσταση" %}</th>
+                            <th>{% trans "Ενέργειες" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for learner in learners %}
+                            <tr>
+                                <td>{{ learner.first_name }} {{ learner.last_name }}</td>
+                                <td>{{ learner.class_assignment }}</td>
+                                <td>{{ learner.first_name }}</td>
+                                <td>{{ learner.last_name }}</td>
+                                <td>
+                                    {% if learner.status == 'active' %}
+                                        <span class="badge bg-success">{% trans "Ενεργός" %}</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{% trans "Ανενεργός" %}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'learners:update' learner.pk %}" class="btn btn-sm btn-outline-primary">
+                                        {% trans "Επεξεργασία" %}
+                                    </a>
+                                    <a href="{% url 'learners:delete' learner.pk %}" class="btn btn-sm btn-outline-danger">
+                                        {% trans "Διαγραφή" %}
+                                    </a>
+                                    <a href="{% url 'learners:detail' learner.id %}" class="btn btn-sm btn-info" title="Προβολή">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'learners:evaluation_create' learner.id %}" class="btn btn-sm btn-success" title="Αξιολόγηση">
+                                        <i class="fas fa-clipboard-check"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center">{% trans "Δεν βρέθηκαν ωφελούμενοι." %}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {% include 'includes/pagination.html' %}
+</div>
+
+<style>
+    th a {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    th a:hover {
+        text-decoration: none;
+        color: #666;
+    }
+    .btn-info {
+        color: white;
+    }
+</style>
+{% endblock %} 

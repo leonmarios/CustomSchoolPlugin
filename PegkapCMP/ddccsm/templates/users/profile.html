@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="h4">{% trans "Το Προφίλ μου" %}</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Profile Info -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">{% trans "Προσωπικά Στοιχεία" %}</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'users:profile_update' %}">
+                        {% csrf_token %}
+                        
+                        {% for field in profile_form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">
+                                {{ field.label }}
+                            </label>
+                            {{ field }}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <button type="submit" class="btn btn-primary">
+                            {% trans "Αποθήκευση" %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">{% trans "Αλλαγή Κωδικού" %}</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'users:change_password' %}">
+                        {% csrf_token %}
+                        
+                        {% for field in password_form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">
+                                {{ field.label }}
+                            </label>
+                            {{ field }}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <button type="submit" class="btn btn-primary">
+                            {% trans "Αλλαγή Κωδικού" %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">{% trans "Πρόσφατη Δραστηριότητα" %}</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_activities %}
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>{% trans "Ημερομηνία/Ώρα" %}</th>
+                                        <th>{% trans "Ενέργεια" %}</th>
+                                        <th>{% trans "IP" %}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for activity in recent_activities %}
+                                        <tr>
+                                            <td>{{ activity.timestamp|date:"d/m/Y H:i:s" }}</td>
+                                            <td>{{ activity.get_action_display }}</td>
+                                            <td>{{ activity.ip_address|default:"-" }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center py-4">
+                            {% trans "Δεν υπάρχει πρόσφατη δραστηριότητα." %}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

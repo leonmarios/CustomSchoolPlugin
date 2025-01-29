@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="h4">{% trans "Αναθέσεις Εκπαιδευτικών" %}</h2>
+        </div>
+        <div class="col text-end">
+            <a href="{% url 'classes:teacher_assignment_create' %}" class="btn btn-primary">
+                {% trans "Νέα Ανάθεση" %}
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            {% if assignments %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Εκπαιδευτικός" %}</th>
+                                <th>{% trans "Τμήμα" %}</th>
+                                <th>{% trans "Κατάσταση" %}</th>
+                                <th>{% trans "Ημερομηνία Ανάθεσης" %}</th>
+                                <th>{% trans "Ενέργειες" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for assignment in assignments %}
+                            <tr>
+                                <td>{{ assignment.teacher.get_full_name }}</td>
+                                <td>{{ assignment.class_group.name }}</td>
+                                <td>
+                                    {% if assignment.is_active %}
+                                        <span class="badge bg-success">{% trans "Ενεργή" %}</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{% trans "Ανενεργή" %}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ assignment.assigned_date }}</td>
+                                <td>
+                                    <a href="{% url 'classes:teacher_assignment_update' assignment.pk %}" class="btn btn-sm btn-outline-primary">
+                                        {% trans "Επεξεργασία" %}
+                                    </a>
+                                    <a href="{% url 'classes:teacher_assignment_delete' assignment.pk %}" class="btn btn-sm btn-outline-danger">
+                                        {% trans "Διαγραφή" %}
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">{% trans "Δεν υπάρχουν αναθέσεις." %}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

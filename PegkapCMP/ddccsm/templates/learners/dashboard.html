@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Σύνολο Ωφελούμενων" %}</h5>
+                    <h2 class="display-4">{{ statistics.totals.total }}</h2>
+                    <div class="text-muted">
+                        <span class="text-success">{{ statistics.totals.active }}</span> ενεργοί,
+                        <span class="text-secondary">{{ statistics.totals.inactive }}</span> ανενεργοί
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Μηνιαίες Εγγραφές" %}</h5>
+                    <canvas id="registrationsChart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Κατανομή Ηλικιών" %}</h5>
+                    <canvas id="ageChart" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Κατανομή ανά Τμήμα" %}</h5>
+                    <canvas id="classChart" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expiring Documents -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0">{% trans "Έγγραφα που Λήγουν Σύντομα" %}</h5>
+        </div>
+        <div class="card-body">
+            {% if statistics.expiring_documents %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Ωφελούμενος" %}</th>
+                                <th>{% trans "Έγγραφο" %}</th>
+                                <th>{% trans "Ημερομηνία Λήξης" %}</th>
+                                <th>{% trans "Ημέρες που Απομένουν" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doc in statistics.expiring_documents %}
+                                <tr>
+                                    <td>{{ doc.learner }}</td>
+                                    <td>{{ doc.document }}</td>
+                                    <td>{{ doc.expiry_date|date:"d/m/Y" }}</td>
+                                    <td>
+                                        {% with days_left=doc.expiry_date|timeuntil %}
+                                            {% if days_left %}
+                                                <span class="badge {% if days_left < 7 %}bg-danger{% else %}bg-warning{% endif %}">
+                                                    {{ days_left }}
+                                                </span>
+                                            {% else %}
+                                                <span class="badge bg-danger">{% trans "Έληξε" %}</span>
+                                            {% endif %}
+                                        {% endwith %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted text-center my-3">
+                    {% trans "Δεν υπάρχουν έγγραφα που λήγουν σύντομα." %}
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Monthly Registrations Chart
+    const registrationsCtx = document.getElementById('registrationsChart').getContext('2d');
+    new Chart(registrationsCtx, {
+        type: 'line',
+        data: {
+            labels: {{ statistics.monthly_registrations|safe }},
+            datasets: [{
+                label: '{% trans "Εγγραφές" %}',
+                data: {{ statistics.monthly_registrations|safe }},
+                borderColor: '#0d6efd',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    // Age Distribution Chart
+    const ageCtx = document.getElementById('ageChart').getContext('2d');
+    new Chart(ageCtx, {
+        type: 'pie',
+        data: {
+            labels: Object.keys({{ statistics.age_distribution|safe }}),
+            datasets: [{
+                data: Object.values({{ statistics.age_distribution|safe }}),
+                backgroundColor: [
+                    '#0d6efd', '#6610f2', '#6f42c1', '#d63384', '#dc3545'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    // Class Distribution Chart
+    const classCtx = document.getElementById('classChart').getContext('2d');
+    new Chart(classCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ statistics.class_distribution|safe }},
+            datasets: [{
+                label: '{% trans "Ωφελούμενοι" %}',
+                data: {{ statistics.class_distribution|safe }},
+                backgroundColor: '#0d6efd'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+});
+</script>
+{% endblock %} 

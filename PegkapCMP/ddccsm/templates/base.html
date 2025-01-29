@@ -1,0 +1,160 @@
+{% load i18n %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Μητρώο Ωφελουμενων - Π.Ε.Γ.Κ.Α.Π.-Ν.Υ.</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .navbar {
+            background-color: #85a25f !important;
+        }
+        .navbar-dark .navbar-brand,
+        .navbar-dark .navbar-nav .nav-link {
+            color: white !important;
+        }
+        .navbar-dark .navbar-brand:hover,
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'learners:list' %}">Μητρώο Ωφελουμενων - Π.Ε.Γ.Κ.Α.Π.-Ν.Υ.</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                {% if user.is_authenticated %}
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.app_name == 'learners' %}active{% endif %}" 
+                           href="{% url 'learners:list' %}">
+                            {% trans "Ωφελούμενοι" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.app_name == 'classes' %}active{% endif %}" 
+                           href="{% url 'classes:list' %}">
+                            {% trans "Τμήματα" %}
+                        </a>
+                    </li>
+                    {% if user.role == 'supervisor' or user.is_superuser %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if request.resolver_match.app_name == 'users' %}active{% endif %}" 
+                           href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {% trans "Διαχείριση" %}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'users:list' %}">
+                                    {% trans "Χρήστες" %}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'users:activity' %}">
+                                    {% trans "Δραστηριότητα Χρηστών" %}
+                                </a>
+                            </li>
+                            {% if user.is_superuser %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'admin:index' %}">
+                                    {% trans "Διαχείριση Django" %}
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                    {% endif %}
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ user.get_full_name|default:user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'users:profile' %}">
+                                    <i class="bi bi-person"></i> {% trans "Το Προφίλ μου" %}
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'logout' %}">
+                                    <i class="bi bi-box-arrow-right"></i> {% trans "Αποσύνδεση" %}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main class="py-4">
+        {% if messages %}
+            <div class="container mt-3">
+                {% for message in messages %}
+                <div class="alert alert-{% if message.tags %}{{ message.tags|cut:'class_created '|cut:'user_created ' }}{% else %}info{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {% block extra_js %}
+    <script src="{% static 'js/dynamic_fields.js' %}"></script>
+    <script src="{% static 'js/conditional_fields.js' %}"></script>
+    <script>
+    function toggleOtherDisability() {
+        console.log('Toggle function called');  // Debug line
+        var select = document.getElementById('id_welfare_disability');
+        var otherDiv = document.getElementById('div_id_welfare_disability_other');
+        
+        console.log('Select:', select);  // Debug line
+        console.log('Other div:', otherDiv);  // Debug line
+        
+        if (select && otherDiv) {
+            if (select.value === 'other') {
+                otherDiv.style.display = 'block';
+            } else {
+                otherDiv.style.display = 'none';
+                document.getElementById('id_welfare_disability_other').value = '';
+            }
+        }
+    }
+
+    // Initialize when tab is shown
+    document.addEventListener('shown.bs.tab', function (event) {
+        if (event.target.getAttribute('href') === '#benefits-pension') {
+            toggleOtherDisability();
+        }
+    });
+
+    // Also initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.getElementById('benefits-pension').classList.contains('active')) {
+            toggleOtherDisability();
+        }
+    });
+    </script>
+    {% endblock %}
+</body>
+</html> 

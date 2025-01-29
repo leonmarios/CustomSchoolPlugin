@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="h4">{% trans "Αξιολογήσεις" %}</h2>
+        </div>
+        <div class="col text-end">
+            <a href="{% url 'learners:evaluation_create_select' %}" class="btn btn-primary">
+                {% trans "Νέα Αξιολόγηση" %}
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            {% if evaluations %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Ωφελούμενος" %}</th>
+                                <th>{% trans "Τύπος" %}</th>
+                                <th>{% trans "Ημερομηνία" %}</th>
+                                <th>{% trans "Αξιολογητής" %}</th>
+                                <th>{% trans "Σημειώσεις" %}</th>
+                                <th>{% trans "Ενέργειες" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for evaluation in evaluations %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'learners:detail' evaluation.learner.pk %}">
+                                        {{ evaluation.learner.first_name }} {{ evaluation.learner.last_name }}
+                                    </a>
+                                </td>
+                                <td>{{ evaluation.get_evaluation_type_display }}</td>
+                                <td>{{ evaluation.evaluation_date }}</td>
+                                <td>{{ evaluation.evaluator.get_full_name|default:evaluation.evaluator.username }}</td>
+                                <td>{{ evaluation.notes|truncatewords:10 }}</td>
+                                <td>
+                                    <a href="{% url 'learners:evaluation_update' evaluation.pk %}" class="btn btn-sm btn-outline-primary">
+                                        {% trans "Επεξεργασία" %}
+                                    </a>
+                                    <a href="{% url 'learners:evaluation_delete' evaluation.pk %}" class="btn btn-sm btn-outline-danger">
+                                        {% trans "Διαγραφή" %}
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">{% trans "Δεν υπάρχουν αξιολογήσεις." %}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% include 'includes/pagination.html' %}
+</div>
+{% endblock %} 

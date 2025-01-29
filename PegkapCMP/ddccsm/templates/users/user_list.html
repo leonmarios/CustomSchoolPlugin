@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="h4">{% trans "Διαχείριση Χρηστών" %}</h2>
+        </div>
+        <div class="col text-end">
+            <a href="{% url 'users:create' %}" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> {% trans "Νέος Χρήστης" %}
+            </a>
+        </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">{% trans "Αναζήτηση" %}</label>
+                    <input type="text" name="q" class="form-control" value="{{ request.GET.q }}" 
+                           placeholder="{% trans 'Όνομα, Email...' %}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">{% trans "Ρόλος" %}</label>
+                    <select name="role" class="form-select">
+                        <option value="">{% trans "Όλοι" %}</option>
+                        <option value="supervisor" {% if request.GET.role == 'supervisor' %}selected{% endif %}>
+                            {% trans "Επόπτες" %}
+                        </option>
+                        <option value="teacher" {% if request.GET.role == 'teacher' %}selected{% endif %}>
+                            {% trans "Εκπαιδευτικοί" %}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">{% trans "Κατάσταση" %}</label>
+                    <select name="status" class="form-select">
+                        <option value="">{% trans "Όλοι" %}</option>
+                        <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>
+                            {% trans "Ενεργοί" %}
+                        </option>
+                        <option value="inactive" {% if request.GET.status == 'inactive' %}selected{% endif %}>
+                            {% trans "Ανενεργοί" %}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        {% trans "Αναζήτηση" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Users List -->
+    <div class="card">
+        <div class="card-body">
+            {% if users %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Όνομα Χρήστη" %}</th>
+                                <th>{% trans "Ονοματεπώνυμο" %}</th>
+                                <th>{% trans "Email" %}</th>
+                                <th>{% trans "Ρόλος" %}</th>
+                                <th>{% trans "Κατάσταση" %}</th>
+                                <th>{% trans "Τελευταία Σύνδεση" %}</th>
+                                <th>{% trans "Ενέργειες" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.get_full_name }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    <span class="badge {% if user.role == 'supervisor' %}bg-primary{% else %}bg-info{% endif %}">
+                                        {{ user.get_role_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge {% if user.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                                        {% if user.is_active %}
+                                            {% trans "Ενεργός" %}
+                                        {% else %}
+                                            {% trans "Ανενεργός" %}
+                                        {% endif %}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if user.last_login %}
+                                        {{ user.last_login|date:"d/m/Y H:i" }}
+                                    {% else %}
+                                        <span class="text-muted">{% trans "Ποτέ" %}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="{% url 'users:update' user.pk %}" class="btn btn-sm btn-outline-primary">
+                                            {% trans "Επεξεργασία" %}
+                                        </a>
+                                        <a href="{% url 'users:reset_password' user.pk %}" class="btn btn-sm btn-outline-warning">
+                                            {% trans "Επαναφορά Κωδικού" %}
+                                        </a>
+                                        {% if not user.is_supervisor or request.user.is_superuser %}
+                                        <a href="{% url 'users:delete' user.pk %}" class="btn btn-sm btn-outline-danger">
+                                            {% trans "Διαγραφή" %}
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                {% include 'includes/pagination.html' %}
+            {% else %}
+                <p class="text-muted text-center py-4">{% trans "Δεν βρέθηκαν χρήστες." %}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

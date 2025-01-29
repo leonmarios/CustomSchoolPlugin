@@ -1,0 +1,1313 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load learner_tags %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+    .nav-tabs .nav-link { padding: 0.5rem 1rem; }
+    .tab-content { padding: 1.5rem 0; }
+    .family-member-form .card-header { background-color: #f8f9fa; }
+    /* Hide the entire form-group when the field is hidden */
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    /* Hide the other field container by default */
+    #div_id_welfare_disability_other {
+        display: none;
+    }
+    
+    /* Show the other field container when 'other' is selected */
+    select[name="welfare_disability"]:has(option[value="other"]:checked) ~ #div_id_welfare_disability_other {
+        display: block !important;
+    }
+    
+    /* Alternative for browsers that don't support :has */
+    select[name="welfare_disability"] option[value="other"]:checked ~ #div_id_welfare_disability_other {
+        display: block !important;
+    }
+    
+    .guardian-emails-container {
+        position: relative;
+    }
+
+    .guardian-email-field input {
+        width: 100% !important;
+    }
+
+    .guardian-emails-wrapper,
+    .guardian-email-wrapper,
+    .guardian-email-field {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Hide any auto-generated containers */
+    .guardian-emails-container .guardian-emails-container {
+        display: none !important;
+    }
+    
+    .guardian-email-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 1rem;
+    }
+    
+    .guardian-email-field {
+        flex-grow: 1;
+        position: relative;
+    }
+    
+    .add-email-btn {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 18px;
+        line-height: 1;
+        padding: 0;
+        position: absolute;
+        right: 0;
+        top: 7px;
+    }
+    
+    .remove-email-btn {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 18px;
+        line-height: 1;
+        padding: 0;
+        margin-left: -40px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .guardian-email-field input {
+        width: 100%;
+        padding-right: 50px;
+        height: 38px;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+    }
+    
+    .guardian-email-container {
+        margin-bottom: 1rem;
+    }
+    
+    .siblings-container {
+        position: relative;
+        display: block;
+    }
+
+    .siblings-fields-wrapper {
+        width: calc(100% - 40px);
+    }
+
+    .sibling-name-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 1rem;
+    }
+    
+    .sibling-name-field {
+        flex-grow: 1;
+        position: relative;
+    }
+    
+    .add-sibling-btn {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 18px;
+        line-height: 1;
+        padding: 0;
+        position: absolute;
+        right: 0;
+        top: 7px;  /* Adjust to vertically center with first input */
+    }
+    
+    .remove-sibling-btn {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 18px;
+        line-height: 1;
+        padding: 0;
+        margin-left: -40px;  /* Move button more to the left */
+        position: relative;
+        z-index: 2;
+    }
+
+    .sibling-name-field input {
+        width: 100%;
+        padding-right: 50px;  /* Increased padding to prevent text overlap with button */
+        height: 38px;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+    }
+
+    /* Hover effects */
+    .add-sibling-btn:hover {
+        background-color: #218838;
+    }
+
+    .remove-sibling-btn:hover {
+        background-color: #c82333;
+    }
+
+    /* Add specific crispy-forms adjustment */
+    .siblings-container .form-group {
+        margin-bottom: 0;  /* Remove extra spacing from crispy-forms */
+    }
+    
+    /* Updated style for the read-only age field */
+    .form-control-plaintext {
+        background-color: #e9ecef;  /* Lighter grey background */
+        border: 1px solid #ced4da;  /* Slightly darker border */
+        padding: 0.375rem 0.75rem;
+        margin-bottom: 0;
+        line-height: 1.5;
+        color: #6c757d;  /* Grey text */
+        cursor: default;  /* Show "not-editable" cursor */
+        border-radius: 0.25rem;  /* Rounded corners */
+    }
+
+    .form-control-plaintext:focus {
+        outline: none;  /* Remove focus outline */
+        box-shadow: none;  /* Remove focus shadow */
+    }
+
+    /* More specific selector for the age field */
+    input[name="calculated_age"] {
+        background-color: #e9ecef !important;  /* Force grey background */
+        border: 1px solid #ced4da !important;
+        padding: 0.375rem 0.75rem;
+        margin-bottom: 0;
+        line-height: 1.5;
+        color: #6c757d !important;
+        cursor: default;
+        border-radius: 0.25rem;
+        pointer-events: none;  /* Prevent any interaction */
+    }
+
+    input[name="calculated_age"]:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Style for the folder name field */
+    input[name="folder_name"] {
+        background-color: #e9ecef !important;
+        border: 1px solid #ced4da !important;
+        padding: 0.375rem 0.75rem;
+        margin-bottom: 0;
+        line-height: 1.5;
+        color: #6c757d !important;
+        cursor: default;
+        border-radius: 0.25rem;
+        pointer-events: none;
+        font-weight: bold;  /* Make the folder name stand out */
+    }
+
+    .photo-preview-container {
+        width: 150px;
+        height: 150px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+        margin-top: 25px;  /* Align with the input field */
+    }
+
+    .photo-preview {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: none;  /* Hidden by default */
+    }
+
+    .photo-preview.has-image {
+        display: block;  /* Show when image is loaded */
+    }
+
+    .family-member-container {
+        position: relative;
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .family-member-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    .add-family-member-btn {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 18px;
+        line-height: 1;
+        padding: 0;
+        position: absolute;
+        right: 15px;
+        top: 15px;
+    }
+
+    .remove-family-member-btn {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 18px;
+        line-height: 1;
+        padding: 0;
+        position: absolute;
+        right: 15px;
+        top: 15px;
+    }
+
+    .add-email-btn {
+        display: none !important;
+    }
+
+    .add-sibling-btn {
+        display: none !important;
+    }
+
+    .sibling-names-container {
+        position: relative;
+    }
+
+    .sibling-name-field input {
+        width: 100%;
+    }
+
+    #additional-siblings .d-flex {
+        width: 50%;
+    }
+
+    input[name="guardian_email"] {
+        width: 100%;
+    }
+</style>
+{% endblock %}
+
+{% block title %}
+    {% if form.instance.pk %}
+        Επεξεργασία {{ form.instance.full_name }}
+    {% else %}
+        Νέος Ωφελούμενος
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="h4">
+                {% if form.instance.pk %}
+                    {% trans "Επεξεργασία Ωφελούμενου" %}
+                {% else %}
+                    {% trans "Νέος Ωφελούμενος" %}
+                {% endif %}
+            </h2>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                {% csrf_token %}
+                
+                <!-- Add folder name field before tabs -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        {{ form.folder_name|as_crispy_field }}
+                    </div>
+                </div>
+
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <p class="mb-0">{{ field.label }}: {{ error }}</p>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <p class="mb-0">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="social-history-tab" data-bs-toggle="tab" href="#social-history" role="tab">
+                            {% trans "Κοινωνικό Ιστορικό" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="demographics-tab" data-bs-toggle="tab" href="#demographics" role="tab">
+                            {% trans "Δημογραφικά Στοιχεία" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="expert-opinions-tab" data-bs-toggle="tab" href="#expert-opinions" role="tab">
+                            {% trans "Γνωματεύσεις Ειδικών" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="family-status-tab" data-bs-toggle="tab" href="#family-status" role="tab">
+                            {% trans "Οικογενειακή Κατάσταση" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="psychomotor-health-tab" data-bs-toggle="tab" href="#psychomotor-health" role="tab">
+                            {% trans "Ψυχοκινητική Εξέλιξη - Υγεία" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="education-tab" data-bs-toggle="tab" href="#education" role="tab">
+                            {% trans "Εκπαίδευση" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="school-achievements-tab" data-bs-toggle="tab" href="#school-achievements" role="tab">
+                            {% trans "Σχολικές Κατακτήσεις" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="skills-behavior-tab" data-bs-toggle="tab" href="#skills-behavior" role="tab">
+                            {% trans "Δεξιότητες - Συμπεριφορά" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="other-info-tab" data-bs-toggle="tab" href="#other-info" role="tab">
+                            {% trans "Λοιπά Στοιχεία" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="benefits-pension-tab" data-bs-toggle="tab" href="#benefits-pension" role="tab">
+                            {% trans "Επίδομα - Σύνταξη" %}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="comments-tab" data-bs-toggle="tab" href="#comments" role="tab">
+                            {% trans "Σχόλια - Παρατηρήσεις" %}
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Tab content -->
+                <div class="tab-content mt-3">
+                    <!-- Social History -->
+                    <div class="tab-pane fade show active" id="social-history" role="tabpanel">
+                        <div class="row">
+                            {% for field_name in form.field_groups.social_history %}
+                                <div class="col-md-6 mb-3">
+                                    {% with field=form|getattribute:field_name %}
+                                        {% if field %}
+                                            <div class="form-group">
+                                                {{ field|as_crispy_field }}
+                                            </div>
+                                        {% endif %}
+                                    {% endwith %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <!-- Demographics -->
+                    <div class="tab-pane fade" id="demographics" role="tabpanel" aria-labelledby="demographics-tab">
+                        <div class="row">
+                            <!-- Photo upload and preview in first row -->
+                            <div class="col-md-6 mb-3 d-flex align-items-center">
+                                <div class="form-group">
+                                    {{ form.photo.label_tag }}
+                                    {{ form.photo }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <img src="{% static 'images/placeholder.png' %}" alt="Photo placeholder" class="img-thumbnail" style="width: 150px; height: 150px;">
+                                {{ form.photo_placeholder }}
+                            </div>
+
+                            <!-- All demographic fields -->
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.first_name.label_tag }}
+                                    {{ form.first_name }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.last_name.label_tag }}
+                                    {{ form.last_name }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.father_first_name.label_tag }}
+                                    {{ form.father_first_name }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.father_last_name.label_tag }}
+                                    {{ form.father_last_name }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.mother_first_name.label_tag }}
+                                    {{ form.mother_first_name }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.mother_last_name.label_tag }}
+                                    {{ form.mother_last_name }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label>Όνομα Αδερφού/ης</label>
+                                    <div class="sibling-names-container" style="margin-right: 50px;">
+                                        <div class="sibling-name-field">
+                                            <input type="text" 
+                                                   name="sibling_name" 
+                                                   class="form-control sibling-name" 
+                                                   maxlength="320" 
+                                                   id="id_sibling_name">
+                                        </div>
+                                        <button type="button" 
+                                                class="btn btn-success" 
+                                                onclick="addSiblingNameField(this)"
+                                                style="height: 38px; width: 38px; position: absolute; right: -45px; top: 0; padding: 6px;">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <div id="additional-siblings"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+                                    <input type="text" class="form-control" disabled style="visibility: hidden;">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.guardian_name.label_tag }}
+                                    {{ form.guardian_name }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.guardian_last_name.label_tag }}
+                                    {{ form.guardian_last_name }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.birth_date.label_tag }}
+                                    {{ form.birth_date }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.calculated_age.label_tag }}
+                                    {{ form.calculated_age }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.gender.label_tag }}
+                                    {{ form.gender }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.birth_place.label_tag }}
+                                    {{ form.birth_place }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.marital_status.label_tag }}
+                                    {{ form.marital_status }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.guardian_marital_status.label_tag }}
+                                    {{ form.guardian_marital_status }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.phone.label_tag }}
+                                    {{ form.phone }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label>Email ωφελούμενου</label>
+                                    <input type="email" name="beneficiary_email" class="form-control" id="id_beneficiary_email">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label>Τηλέφωνο Δικαστικού Συμπαραστάτη</label>
+                                    <input type="tel" name="guardian_phone" class="form-control" id="id_guardian_phone">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label>Email δικαστικού συμπαραστάτη</label>
+                                    <div style="position: relative; padding-right: 45px;">
+                                        {{ form.guardian_email }}
+                                        <button type="button" 
+                                                class="btn btn-success" 
+                                                onclick="addGuardianEmailField(this)" 
+                                                style="height: 38px; width: 38px; position: absolute; right: 0; top: 0; padding: 6px;">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <div id="additional-emails"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label>Διεύθυνση</label>
+                                    {{ form.address }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+                                    <input type="text" class="form-control" disabled style="visibility: hidden;">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.id_number.label_tag }}
+                                    {{ form.id_number }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.amka.label_tag }}
+                                    {{ form.amka }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.insurance_type.label_tag }}
+                                    {{ form.insurance_type }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.insurance_fund.label_tag }}
+                                    {{ form.insurance_fund }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.ama.label_tag }}
+                                    {{ form.ama }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label>ΑΜΑ Άμεσα Ασφαλισμένου (γονέα/δικαστικού συμπαραστάτη)</label>
+                                    {{ form.guardian_ama }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.tax_number.label_tag }}
+                                    {{ form.tax_number }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.judicial_support.label_tag }}
+                                    {{ form.judicial_support }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.court_decision.label_tag }}
+                                    {{ form.court_decision }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.inclusion_agreement.label_tag }}
+                                    {{ form.inclusion_agreement }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.gdpr.label_tag }}
+                                    {{ form.gdpr }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    {{ form.referral.label_tag }}
+                                    {{ form.referral }}
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label>Άλλη πληροφορία</label>
+                                    <textarea name="other_info" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    
+                    <!-- Expert Opinions -->
+                    <div class="tab-pane fade" id="expert-opinions" role="tabpanel">
+                        <div class="row">
+                            {% for field_name in form.field_groups.expert_opinions %}
+                                <div class="col-md-6 mb-3">
+                                    {% with field=form|getattribute:field_name %}
+                                        {% if field %}
+                                            <div class="form-group">
+                                                {{ field|as_crispy_field }}
+                                            </div>
+                                        {% endif %}
+                                    {% endwith %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Family Status -->
+                    <div class="tab-pane fade" id="family-status" role="tabpanel" aria-labelledby="family-status-tab">
+                        <div class="row">
+                            {% for field_name in form.field_groups.family_status %}
+                                <div class="col-md-6 mb-3">
+                                    {% with field=form|getattribute:field_name %}
+                                        {% if field %}
+                                            <div class="form-group">
+                                                {{ field|as_crispy_field }}
+                                            </div>
+                                        {% endif %}
+                                    {% endwith %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <!-- Add the family members form here -->
+                        <div class="card mt-4" id="family-members-section">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <button type="button" class="btn btn-sm btn-success add-family-member" id="main-add-button">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div id="family-members-container">
+                                    <!-- First member will be added here by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Psychomotor Health -->
+                    <div class="tab-pane fade" id="psychomotor-health" role="tabpanel">
+                        <div class="row">
+                            {% for field_name in form.field_groups.psychomotor_health %}
+                                <div class="col-md-6 mb-3">
+                                    {% with field=form|getattribute:field_name %}
+                                        {% if field %}
+                                            <div class="form-group">
+                                                {{ field|as_crispy_field }}
+                                            </div>
+                                        {% endif %}
+                                    {% endwith %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Education -->
+                    <div class="tab-pane fade" id="education" role="tabpanel">
+                        <div class="row">
+                            {% for field_name in form.field_groups.education %}
+                                <div class="col-md-6 mb-3">
+                                    {% with field=form|getattribute:field_name %}
+                                        {% if field %}
+                                            <div class="form-group">
+                                                {{ field|as_crispy_field }}
+                                            </div>
+                                        {% endif %}
+                                    {% endwith %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- School Achievements -->
+                    <div class="tab-pane fade" id="school-achievements" role="tabpanel">
+                        <div class="row">
+                            {% for field_name in form.field_groups.school_achievements %}
+                                <div class="col-md-6 mb-3">
+                                    {% with field=form|getattribute:field_name %}
+                                        {% if field %}
+                                            <div class="form-group">
+                                                {{ field|as_crispy_field }}
+                                            </div>
+                                        {% endif %}
+                                    {% endwith %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Skills Behavior -->
+                    <div class="tab-pane fade" id="skills-behavior" role="tabpanel">
+                        <div class="row">
+                            {% for field_name in form.field_groups.skills_behavior %}
+                                <div class="col-md-6 mb-3">
+                                    {% with field=form|getattribute:field_name %}
+                                        {% if field %}
+                                            <div class="form-group">
+                                                {{ field|as_crispy_field }}
+                                            </div>
+                                        {% endif %}
+                                    {% endwith %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Other Info -->
+                    <div class="tab-pane fade" id="other-info" role="tabpanel">
+                        <div class="row">
+                            {% for field_name in form.field_groups.other_info %}
+                                <div class="col-md-6 mb-3">
+                                    {% with field=form|getattribute:field_name %}
+                                        {% if field %}
+                                            <div class="form-group">
+                                                {{ field|as_crispy_field }}
+                                            </div>
+                                        {% endif %}
+                                    {% endwith %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Benefits Pension -->
+                    <div class="tab-pane fade" id="benefits-pension" role="tabpanel">
+                        <div class="row">
+                            {% for field_name in form.field_groups.benefits_pension %}
+                                <div class="col-md-6 mb-3">
+                                    {% with field=form|getattribute:field_name %}
+                                        {% if field %}
+                                            <div class="form-group">
+                                                {{ field|as_crispy_field }}
+                                            </div>
+                                        {% endif %}
+                                    {% endwith %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Comments -->
+                    <div class="tab-pane fade" id="comments" role="tabpanel">
+                        <div class="row">
+                            {% for field_name in form.field_groups.comments %}
+                                <div class="col-md-6 mb-3">
+                                    {% with field=form|getattribute:field_name %}
+                                        {% if field %}
+                                            <div class="form-group">
+                                                {{ field|as_crispy_field }}
+                                            </div>
+                                        {% endif %}
+                                    {% endwith %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 border-top pt-3">
+                    <a href="{% url 'learners:list' %}" class="btn btn-secondary">{% trans "Ακύρωση" %}</a>
+                    <button type="submit" class="btn btn-primary">{% trans "Αποθήκευση" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+let memberCount = 0;
+
+function createFamilyMemberForm(index) {
+    return `
+        <div class="family-member-form mb-4 border p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6>Μέλος ${index + 1}</h6>
+                <button type="button" class="btn btn-sm btn-danger remove-family-member">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Όνομα</label>
+                        <input type="text" class="form-control" name="family_members[${index}][name]" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Επώνυμο</label>
+                        <input type="text" class="form-control" name="family_members[${index}][lastname]" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Συγγενική σχέση</label>
+                        <input type="text" class="form-control" name="family_members[${index}][relation]" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Ημερομηνία γέννησης</label>
+                        <input type="date" class="form-control" name="family_members[${index}][birthdate]">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Εκπαίδευση</label>
+                        <input type="text" class="form-control" name="family_members[${index}][education]">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Επάγγελμα</label>
+                        <input type="text" class="form-control" name="family_members[${index}][occupation]">
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function addFamilyMember() {
+    if (memberCount >= 5) {
+        document.getElementById('main-add-button').style.display = 'none';
+        return;
+    }
+    
+    const container = document.getElementById('family-members-container');
+    
+    // Add new member
+    const memberHtml = createFamilyMemberForm(memberCount);
+    container.insertAdjacentHTML('beforeend', memberHtml);
+    
+    // Add remove handler to new member
+    const newMember = container.lastElementChild;
+    newMember.querySelector('.remove-family-member').addEventListener('click', function() {
+        removeFamilyMember(newMember);
+    });
+    
+    // Update counter
+    memberCount++;
+    
+    // Hide add button if limit reached
+    if (memberCount >= 5) {
+        document.getElementById('main-add-button').style.display = 'none';
+    }
+}
+
+function removeFamilyMember(memberElement) {
+    memberElement.remove();
+    memberCount--;
+    
+    // Show add button if below limit
+    if (memberCount < 5) {
+        document.getElementById('main-add-button').style.display = 'block';
+    }
+    
+    // Renumber remaining members
+    const members = document.querySelectorAll('.family-member-form');
+    members.forEach((member, index) => {
+        member.querySelector('h6').textContent = `Μέλος ${index + 1}`;
+        member.querySelectorAll('input').forEach(input => {
+            const name = input.getAttribute('name');
+            input.setAttribute('name', name.replace(/\[\d+\]/, `[${index}]`));
+        });
+    });
+}
+
+// Update the initialization to be more specific
+document.addEventListener('DOMContentLoaded', function() {
+    // Only proceed if we're on the family status tab
+    const familyMembersSection = document.getElementById('family-members-section');
+    if (!familyMembersSection) return;
+    
+    // Remove any extra buttons
+    const extraButtons = document.querySelectorAll('.add-family-member-btn');
+    extraButtons.forEach(btn => btn.remove());
+    
+    // Add first member
+    addFamilyMember();
+});
+
+function addGuardianEmailField(button) {
+    const container = button.closest('.form-group');
+    const emailFields = container.querySelectorAll('input[type="email"]');
+    
+    if (emailFields.length >= 5) {
+        alert('Μέγιστος αριθμός email: 5');
+        return;
+    }
+    
+    const newEmailDiv = document.createElement('div');
+    newEmailDiv.className = 'd-flex mt-2';
+    
+    const newEmail = document.createElement('input');
+    newEmail.type = 'email';
+    newEmail.name = `guardian_email_${emailFields.length}`;
+    newEmail.className = 'form-control guardian-email';
+    
+    const removeButton = document.createElement('button');
+    removeButton.type = 'button';
+    removeButton.className = 'btn btn-danger btn-sm ms-2';
+    removeButton.innerHTML = '<i class="fas fa-minus"></i>';
+    removeButton.onclick = function() {
+        newEmailDiv.remove();
+    };
+    
+    newEmailDiv.appendChild(newEmail);
+    newEmailDiv.appendChild(removeButton);
+    container.appendChild(newEmailDiv);
+}
+
+function addSiblingNameField(button) {
+    const container = button.closest('.form-group');
+    const siblingFields = container.querySelectorAll('input[name^="sibling_name"]');
+    
+    if (siblingFields.length >= 5) {
+        alert('Μέγιστος αριθμός αδερφών: 5');
+        return;
+    }
+    
+    const newSiblingDiv = document.createElement('div');
+    newSiblingDiv.className = 'd-flex mt-2';
+    
+    const newSibling = document.createElement('input');
+    newSibling.type = 'text';
+    newSibling.name = `sibling_name_${siblingFields.length}`;
+    newSibling.className = 'form-control sibling-name';
+    
+    const removeButton = document.createElement('button');
+    removeButton.type = 'button';
+    removeButton.className = 'btn btn-danger btn-sm ms-2';
+    removeButton.innerHTML = '<i class="fas fa-minus"></i>';
+    removeButton.onclick = function() {
+        newSiblingDiv.remove();
+    };
+    
+    newSiblingDiv.appendChild(newSibling);
+    newSiblingDiv.appendChild(removeButton);
+    container.appendChild(newSiblingDiv);
+}
+</script>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.el.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get elements within the benefits-pension tab
+    const select = document.querySelector('#benefits-pension select[name="welfare_disability"]');
+    const otherFieldDiv = document.querySelector('#benefits-pension #div_id_welfare_disability_other');
+    
+    if (select && otherFieldDiv) {
+        function toggleOtherField() {
+            const isOther = select.value === 'other';
+            
+            if (isOther) {
+                otherFieldDiv.style.display = 'block';
+                const input = otherFieldDiv.querySelector('input');
+                if (input) input.focus();
+            } else {
+                otherFieldDiv.style.display = 'none';
+                const input = otherFieldDiv.querySelector('input');
+                if (input) input.value = '';
+            }
+        }
+        
+        // Set initial state
+        toggleOtherField();
+        
+        // Add change listener
+        select.addEventListener('change', toggleOtherField);
+    }
+
+    // Handle guardian email fields
+    const emailField = document.querySelector('[name="guardian_email"]');
+    if (emailField) {
+        // Create container for all email elements
+        const container = document.createElement('div');
+        container.className = 'guardian-emails-container';
+        
+        // Create wrapper for email fields
+        const fieldsWrapper = document.createElement('div');
+        fieldsWrapper.className = 'guardian-emails-wrapper';
+        
+        // Create wrapper for the first field
+        const firstFieldWrapper = document.createElement('div');
+        firstFieldWrapper.className = 'guardian-email-wrapper';
+        
+        // Move the original field to its wrapper
+        const firstFieldContainer = document.createElement('div');
+        firstFieldContainer.className = 'guardian-email-field';
+        
+        // Move elements to their new structure
+        emailField.parentElement.insertBefore(container, emailField);
+        firstFieldContainer.appendChild(emailField);
+        firstFieldWrapper.appendChild(firstFieldContainer);
+        fieldsWrapper.appendChild(firstFieldWrapper);
+        container.appendChild(fieldsWrapper);
+
+        // Create add button
+        const addBtn = document.createElement('button');
+        addBtn.type = 'button';
+        addBtn.className = 'add-email-btn';
+        addBtn.innerHTML = '+';
+        container.appendChild(addBtn);
+
+        let emailCount = 1;
+
+        addBtn.addEventListener('click', function() {
+            if (emailCount >= 5) {
+                alert('Μέγιστος αριθμός email: 5');
+                return;
+            }
+
+            const newWrapper = document.createElement('div');
+            newWrapper.className = 'guardian-email-wrapper';
+            
+            const newFieldContainer = document.createElement('div');
+            newFieldContainer.className = 'guardian-email-field';
+            
+            const newField = document.createElement('input');
+            newField.type = 'email';
+            newField.name = `guardian_email_${emailCount}`;
+            newField.className = 'form-control guardian-email';
+            newField.setAttribute('data-email-index', emailCount);
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'remove-email-btn';
+            removeBtn.innerHTML = '×';
+            
+            newFieldContainer.appendChild(newField);
+            newWrapper.appendChild(newFieldContainer);
+            newWrapper.appendChild(removeBtn);
+            fieldsWrapper.appendChild(newWrapper);
+            
+            removeBtn.addEventListener('click', function() {
+                newWrapper.remove();
+                emailCount--;
+                
+                // Re-index remaining fields
+                const remainingFields = fieldsWrapper.querySelectorAll('.guardian-email');
+                remainingFields.forEach((field, index) => {
+                    if (index > 0) {  // Skip the first field
+                        field.name = `guardian_email_${index}`;
+                        field.setAttribute('data-email-index', index);
+                    }
+                });
+            });
+            
+            emailCount++;
+            newField.focus();
+        });
+    }
+
+    // Handle age calculation
+    const birthDateField = document.querySelector('[name="birth_date"]');
+    const calculatedAgeField = document.querySelector('[name="calculated_age"]');
+    
+    if (birthDateField && calculatedAgeField) {
+        function calculateAge(birthDate) {
+            const today = new Date();
+            const birth = new Date(birthDate);
+            
+            let age = today.getFullYear() - birth.getFullYear();
+            const monthDiff = today.getMonth() - birth.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                age--;
+            }
+            
+            return `${age} ετών`;
+        }
+        
+        function updateAge() {
+            if (birthDateField.value) {
+                calculatedAgeField.value = calculateAge(birthDateField.value);
+            } else {
+                calculatedAgeField.value = '';
+            }
+        }
+        
+        // Update age when birth date changes
+        birthDateField.addEventListener('change', updateAge);
+        
+        // Calculate initial age
+        updateAge();
+    }
+
+    // Handle folder name updates
+    const firstNameField = document.querySelector('[name="first_name"]');
+    const lastNameField = document.querySelector('[name="last_name"]');
+    const folderNameField = document.querySelector('[name="folder_name"]');
+    
+    if (firstNameField && lastNameField && folderNameField) {
+        function updateFolderName() {
+            const firstName = firstNameField.value.trim();
+            const lastName = lastNameField.value.trim();
+            if (firstName || lastName) {
+                folderNameField.value = `${firstName} ${lastName}`.trim();
+            } else {
+                folderNameField.value = '';
+            }
+        }
+        
+        // Update folder name when first or last name changes
+        firstNameField.addEventListener('input', updateFolderName);
+        lastNameField.addEventListener('input', updateFolderName);
+        
+        // Initial update
+        updateFolderName();
+    }
+
+    // Handle photo preview
+    const photoInput = document.querySelector('input[name="photo"]');
+    const photoPlaceholder = document.querySelector('input[name="photo_placeholder"]');
+    
+    if (photoInput && photoPlaceholder) {
+        // Create preview container and image element
+        const previewContainer = document.createElement('div');
+        previewContainer.className = 'photo-preview-container';
+        const previewImg = document.createElement('img');
+        previewImg.className = 'photo-preview';
+        previewContainer.appendChild(previewImg);
+        
+        // Replace placeholder with preview container
+        photoPlaceholder.parentElement.replaceWith(previewContainer);
+        
+        // Show existing photo if any
+        {% if form.instance.photo %}
+            previewImg.src = "{{ form.instance.photo.url }}";
+            previewImg.classList.add('has-image');
+        {% endif %}
+        
+        // Update preview when new photo is selected
+        photoInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    previewImg.classList.add('has-image');
+                };
+                reader.readAsDataURL(this.files[0]);
+            } else {
+                previewImg.src = '';
+                previewImg.classList.remove('has-image');
+            }
+        });
+    }
+});
+
+$(document).ready(function() {
+    // Set moment.js locale first (if you're using it)
+    moment.locale('el');
+    
+    // Override jQuery UI regional settings
+    $.datepicker.setDefaults($.datepicker.regional['el']);
+    
+    $('.datepicker').datepicker({
+        format: 'dd/mm/yyyy',
+        language: 'el',
+        autoclose: true,
+        orientation: 'bottom',
+        todayHighlight: true,
+        clearBtn: true,
+        forceParse: false,
+        assumeNearbyYear: true,
+        // Override any system defaults
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1
+    });
+});
+</script>
+{% endblock %} 

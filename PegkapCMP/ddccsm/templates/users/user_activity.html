@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="h4">{% trans "Δραστηριότητα Χρηστών" %}</h2>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">{% trans "Χρήστης" %}</label>
+                    <select name="user" class="form-select">
+                        <option value="">{% trans "Όλοι οι χρήστες" %}</option>
+                        {% for user in all_users %}
+                            <option value="{{ user.id }}" {% if request.GET.user|add:"0" == user.id %}selected{% endif %}>
+                                {{ user.get_full_name|default:user.username }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">{% trans "Ενέργεια" %}</label>
+                    <select name="action" class="form-select">
+                        <option value="">{% trans "Όλες οι ενέργειες" %}</option>
+                        {% for action, label in action_choices %}
+                            <option value="{{ action }}" {% if request.GET.action == action %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        {% trans "Φιλτράρισμα" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add this before the table -->
+    <div class="mb-3 text-end">
+        <a href="{% url 'users:export_activity' %}{% if request.GET %}?{{ request.GET.urlencode }}{% endif %}" 
+           class="btn btn-success">
+            <i class="bi bi-download"></i> {% trans "Εξαγωγή σε CSV" %}
+        </a>
+    </div>
+
+    <!-- Activity List -->
+    <div class="card">
+        <div class="card-body">
+            {% if activities %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Ημερομηνία/Ώρα" %}</th>
+                                <th>{% trans "Χρήστης" %}</th>
+                                <th>{% trans "Ενέργεια" %}</th>
+                                <th>{% trans "Από" %}</th>
+                                <th>{% trans "IP" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for activity in activities %}
+                                <tr>
+                                    <td>{{ activity.timestamp|date:"d/m/Y H:i:s" }}</td>
+                                    <td>{{ activity.user.get_full_name|default:activity.user.username }}</td>
+                                    <td>{{ activity.get_action_display }}</td>
+                                    <td>
+                                        {% if activity.performed_by %}
+                                            {{ activity.performed_by.get_full_name|default:activity.performed_by.username }}
+                                        {% else %}
+                                            {% trans "Σύστημα" %}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ activity.ip_address|default:"-" }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% include 'includes/pagination.html' %}
+            {% else %}
+                <p class="text-muted text-center py-4">{% trans "Δεν βρέθηκαν δραστηριότητες." %}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

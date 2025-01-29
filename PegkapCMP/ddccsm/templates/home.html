@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Αρχική{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="jumbotron">
+        <h1 class="display-4">Καλώς ήρθατε στο Μητρώο Ωφελουμενων</h1>
+        <p class="lead">Π.Ε.Γ.Κ.Α.Π.-Ν.Υ.</p>
+        <hr class="my-4">
+        <p>Σύστημα Διαχείρισης Ωφελουμένων</p>
+    </div>
+</div>
+
+<div class="container">
+    
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-users"></i> Ωφελούμενοι
+                    </h5>
+                    <p class="card-text">Διαχείριση ωφελούμενων, προσωπικών στοιχείων και εγγραφών.</p>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'learners:list' %}" class="btn btn-primary">
+                            <i class="fas fa-list"></i> Λίστα
+                        </a>
+                        <a href="{% url 'learners:create' %}" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Νέος
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-chalkboard"></i> Τμήματα
+                    </h5>
+                    <p class="card-text">Διαχείριση τμημάτων, προγραμμάτων και δραστηριοτήτων.</p>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'classes:list' %}" class="btn btn-primary">
+                            <i class="fas fa-list"></i> Λίστα
+                        </a>
+                        <a href="{% url 'classes:create' %}" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Νέο
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-cog"></i> Ρυθμίσεις
+                    </h5>
+                    <p class="card-text">Διαχείριση πεδίων φόρμας και άλλων ρυθμίσεων του συστήματος.</p>
+                    <a href="{% url 'admin:learners_formfield_changelist' %}" class="btn btn-primary">
+                        <i class="fas fa-cog"></i> Πεδία Φόρμας
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-question-circle"></i> Βοήθεια
+                    </h5>
+                    <p class="card-text">Οδηγίες χρήσης και υποστήριξη για το σύστημα.</p>
+                    <a href="#" class="btn btn-primary disabled">
+                        <i class="fas fa-book"></i> Εγχειρίδιο
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

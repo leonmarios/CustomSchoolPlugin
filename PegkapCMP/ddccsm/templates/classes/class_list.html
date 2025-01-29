@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Τμήματα{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Τμήματα</h1>
+        <a href="{% url 'classes:create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Νέο Τμήμα
+        </a>
+    </div>
+
+    <div class="row">
+        {% for class in object_list %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ class.name }}</h5>
+                    <p class="card-text">{{ class.description|truncatewords:30 }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge {% if class.is_active %}bg-success{% else %}bg-danger{% endif %}">
+                            {% if class.is_active %}Ενεργό{% else %}Ανενεργό{% endif %}
+                        </span>
+                        <div class="btn-group">
+                            <a href="{% url 'classes:detail' class.pk %}" class="btn btn-sm btn-info">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{% url 'classes:edit' class.pk %}" class="btn btn-sm btn-warning">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'classes:delete' class.pk %}" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                Δεν υπάρχουν τμήματα. <a href="{% url 'classes:create' %}">Δημιουργήστε το πρώτο τμήμα</a>.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

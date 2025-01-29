@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="h4">{% trans "Διαγραφή Αξιολόγησης" %}</h2>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <p>{% trans "Είστε βέβαιοι ότι θέλετε να διαγράψετε την αξιολόγηση;" %}</p>
+            <p><strong>{{ object.get_evaluation_type_display }}</strong> - {{ object.evaluation_date }}</p>
+            
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">{% trans "Διαγραφή" %}</button>
+                <a href="{% url 'learners:detail' object.learner.pk %}" class="btn btn-outline-secondary">
+                    {% trans "Ακύρωση" %}
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

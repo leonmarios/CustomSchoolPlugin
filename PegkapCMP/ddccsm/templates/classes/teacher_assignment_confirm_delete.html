@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="h4">{% trans "Διαγραφή Ανάθεσης" %}</h2>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <p>{% trans "Είστε βέβαιοι ότι θέλετε να διαγράψετε την ανάθεση;" %}</p>
+            <p><strong>{{ object.teacher.get_full_name }}</strong> - {{ object.class_group.name }}</p>
+            
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">{% trans "Διαγραφή" %}</button>
+                <a href="{% url 'classes:teacher_assignment_list' %}" class="btn btn-outline-secondary">
+                    {% trans "Ακύρωση" %}
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

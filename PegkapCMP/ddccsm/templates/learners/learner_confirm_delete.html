@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Διαγραφή {{ object.full_name }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title h5 mb-0">Διαγραφή Ωφελούμενου</h2>
+            </div>
+            <div class="card-body">
+                <p class="alert alert-danger">
+                    Είστε σίγουροι ότι θέλετε να διαγράψετε τον ωφελούμενο "{{ object.full_name }}"?
+                    Η ενέργεια αυτή δεν μπορεί να αναιρεθεί.
+                </p>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'learners:detail' object.pk %}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Άκυρο
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Διαγραφή
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

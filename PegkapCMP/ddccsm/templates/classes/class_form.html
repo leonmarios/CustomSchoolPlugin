@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+    {% if form.instance.pk %}
+        Επεξεργασία {{ form.instance.name }}
+    {% else %}
+        Νέο Τμήμα
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title h5 mb-0">
+                    {% if form.instance.pk %}
+                        Επεξεργασία {{ form.instance.name }}
+                    {% else %}
+                        Νέο Τμήμα
+                    {% endif %}
+                </h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            {{ form.name|as_crispy_field }}
+                        </div>
+                        <div class="col-md-12">
+                            {{ form.description|as_crispy_field }}
+                        </div>
+                        <div class="col-md-12">
+                            {{ form.is_active|as_crispy_field }}
+                        </div>
+                    </div>
+
+                    <h5 class="mb-3">Πρόγραμμα</h5>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width: 120px;">Ώρα</th>
+                                    {% for day_id, day_name in weekdays %}
+                                        <th>{{ day_name }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for time_slot, time_display in time_slots %}
+                                    <tr>
+                                        <td>{{ time_display }}</td>
+                                        {% for day_id, _ in weekdays %}
+                                            {% with schedule_key=day_id|stringformat:"d"|add:"-"|add:time_slot %}
+                                            <td>
+                                                <input type="text" 
+                                                       name="schedule-{{ day_id }}-{{ time_slot }}"
+                                                       class="form-control form-control-sm"
+                                                       placeholder="Δραστηριότητα"
+                                                       value="{{ selected_slots|default:''|get_item:schedule_key }}">
+                                            </td>
+                                            {% endwith %}
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{% url 'classes:list' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Επιστροφή
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Αποθήκευση
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

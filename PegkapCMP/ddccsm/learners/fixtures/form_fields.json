@@ -1,0 +1,1043 @@
+[
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "folder_name",
+      "label": "ΦΑΚΕΛΟΣ :ΟΝΟΜΑΤΕΠΩΝΥΜΟ",
+      "field_type": "text",
+      "section": "social_history",
+      "required": true,
+      "is_active": true,
+      "order": 1
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "arrival_date",
+      "label": "Ημερομηνία Προσέλευσης",
+      "field_type": "date",
+      "section": "social_history",
+      "required": true,
+      "is_active": true,
+      "order": 2
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "rv_team",
+      "label": "RV Διεπιστημονική Ομάδα",
+      "field_type": "text",
+      "section": "social_history",
+      "required": false,
+      "is_active": true,
+      "order": 3
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "decision_announcement",
+      "label": "Ανακοίνωση Απόφασης",
+      "field_type": "text",
+      "section": "social_history",
+      "required": false,
+      "is_active": true,
+      "order": 4
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "class_assignment",
+      "label": "Τμήμα",
+      "field_type": "class",
+      "section": "social_history",
+      "required": false,
+      "is_active": true,
+      "order": 5
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "departure_date",
+      "label": "Ημερομηνία αποχώρησης",
+      "field_type": "date",
+      "section": "social_history",
+      "required": false,
+      "is_active": true,
+      "order": 6
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "photo",
+      "label": "Φωτογραφία",
+      "field_type": "file",
+      "section": "demographics",
+      "required": false,
+      "is_active": true,
+      "order": 1
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "father_name",
+      "label": "Όνομα Πατρός",
+      "field_type": "text",
+      "section": "demographics",
+      "required": true,
+      "is_active": true,
+      "order": 2
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "father_surname",
+      "label": "Επώνυμο Πατρός",
+      "field_type": "text",
+      "section": "demographics",
+      "required": true,
+      "is_active": true,
+      "order": 3
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "mother_name",
+      "label": "Όνομα Μητρός",
+      "field_type": "text",
+      "section": "demographics",
+      "required": true,
+      "is_active": true,
+      "order": 4
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "mother_surname",
+      "label": "Επώνυμο Μητρός",
+      "field_type": "text",
+      "section": "demographics",
+      "required": true,
+      "is_active": true,
+      "order": 5
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "sibling1_name",
+      "label": "Όνομα Αδερφού/ης 1",
+      "field_type": "text",
+      "section": "demographics",
+      "required": false,
+      "is_active": true,
+      "order": 6
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "sibling2_name",
+      "label": "Όνομα Αδερφού/ης 2",
+      "field_type": "text",
+      "section": "demographics",
+      "required": false,
+      "is_active": true,
+      "order": 7
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "sibling3_name",
+      "label": "Όνομα Αδερφού/ης 3",
+      "field_type": "text",
+      "section": "demographics",
+      "required": false,
+      "is_active": true,
+      "order": 8
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "guardian_name",
+      "label": "Όνομα Δικαστικού Συμπαραστάτη",
+      "field_type": "text",
+      "section": "demographics",
+      "required": false,
+      "is_active": true,
+      "order": 9
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "guardian_surname",
+      "label": "Επώνυμο Δικαστικού Συμπαραστάτη",
+      "field_type": "text",
+      "section": "demographics",
+      "required": false,
+      "is_active": true,
+      "order": 10
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "birth_date",
+      "label": "Ημερομηνία Γέννησης",
+      "field_type": "date",
+      "section": "demographics",
+      "required": true,
+      "is_active": true,
+      "order": 11
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "age",
+      "label": "Ηλικία",
+      "field_type": "number",
+      "section": "demographics",
+      "required": true,
+      "is_active": true,
+      "order": 12
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "birth_place",
+      "label": "Τόπος Γέννησης",
+      "field_type": "text",
+      "section": "demographics",
+      "required": true,
+      "is_active": true,
+      "order": 13
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "marital_status",
+      "label": "Οικογενειακή Κατάσταση Δ.Σ.",
+      "field_type": "radio",
+      "section": "demographics",
+      "required": true,
+      "is_active": true,
+      "order": 14,
+      "choices": "Άγαμος\nΈγγαμος\nΔιαζευγμένος"
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "guardian_marital_status",
+      "label": "Οικογενειακή Κατάσταση Συμπαραστάτη",
+      "field_type": "radio",
+      "section": "demographics",
+      "required": true,
+      "is_active": true,
+      "order": 15,
+      "choices": "Άγαμος\nΈγγαμος\nΔιαζευγμένος"
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "address",
+      "label": "Διεύθυνση",
+      "field_type": "text",
+      "section": "demographics",
+      "required": true,
+      "is_active": true,
+      "order": 16
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "phone",
+      "label": "Τηλέφωνο Ωφελούμενου",
+      "field_type": "text",
+      "section": "demographics",
+      "required": false,
+      "is_active": true,
+      "order": 17
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "emergency_phone",
+      "label": "ΤΗΛ. Δ.Σ./ ΕΚΤΑΚΤΗΣ ΑΝΑΓΚΗΣ",
+      "field_type": "text",
+      "section": "demographics",
+      "required": true,
+      "is_active": true,
+      "order": 18
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "email",
+      "label": "Email ωφελούμενου",
+      "field_type": "email",
+      "section": "demographics",
+      "required": false,
+      "is_active": true,
+      "order": 19
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "guardian_email",
+      "label": "Email δικαστικού συμπαραστάτη",
+      "field_type": "email",
+      "section": "demographics",
+      "required": false,
+      "is_active": true,
+      "order": 20
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "id_number",
+      "label": "Α.Δ.Τ. ωφελούμενου",
+      "field_type": "text",
+      "section": "demographics",
+      "required": true,
+      "is_active": true,
+      "order": 21
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "amka",
+      "label": "ΑΜΚΑ Ωφελούμενου",
+      "field_type": "number",
+      "section": "demographics",
+      "required": true,
+      "is_active": true,
+      "order": 22
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "insurance_type",
+      "label": "Τρόπος ασφάλισης",
+      "field_type": "radio",
+      "section": "demographics",
+      "required": true,
+      "is_active": true,
+      "order": 23,
+      "choices": "Άμεσα Ασφαλισμένος\nΈμμεσα Ασφαλισμένος"
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "insurance_fund",
+      "label": "Ασφαλιστικό Ταμείο",
+      "field_type": "text",
+      "section": "demographics",
+      "required": true,
+      "is_active": true,
+      "order": 24
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "ama",
+      "label": "ΑΜΑ Ωφελούμενου",
+      "field_type": "text",
+      "section": "demographics",
+      "required": false,
+      "is_active": true,
+      "order": 25
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "guardian_ama",
+      "label": "ΑΜΑ Αμεσα Ασφαλισμένου (γονέα/δικαστικού συμπαραστάτη)",
+      "field_type": "text",
+      "section": "demographics",
+      "required": false,
+      "is_active": true,
+      "order": 26
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "afm",
+      "label": "ΑΦΜ",
+      "field_type": "number",
+      "section": "demographics",
+      "required": true,
+      "is_active": true,
+      "order": 27
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "judicial_support",
+      "label": "Δικαστική Συμπαράσταση",
+      "field_type": "text",
+      "section": "demographics",
+      "required": false,
+      "is_active": true,
+      "order": 28
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "court_decision",
+      "label": "Απόφαση Δικαστηρίου",
+      "field_type": "text",
+      "section": "demographics",
+      "required": false,
+      "is_active": true,
+      "order": 29
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "has_kesy",
+      "label": "Κέντρα Εκπαιδευτικής και Συμβουλευτικής Υποστήριξης (ΚΕΣΥ)",
+      "field_type": "radio",
+      "section": "expert_opinions",
+      "required": true,
+      "is_active": true,
+      "order": 1,
+      "choices": "Ναι\nΌχι"
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "has_kepa",
+      "label": "Κέντρο Πιστοποίησης Αναπηρίας (ΚΕΠΑ)",
+      "field_type": "radio",
+      "section": "expert_opinions",
+      "required": true,
+      "is_active": true,
+      "order": 2,
+      "choices": "Ναι\nΌχι"
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "family_members",
+      "label": "Μέλη Οικογένειας",
+      "field_type": "dynamic_family",
+      "section": "family_status",
+      "required": false,
+      "is_active": true,
+      "order": 1,
+      "help_text": "Προσθέστε τα μέλη της οικογένειας"
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "has_heredity",
+      "label": "Ύπαρξη Κληρονομικότητας",
+      "field_type": "radio",
+      "section": "family_status",
+      "required": true,
+      "is_active": true,
+      "order": 2,
+      "choices": "Ναι\nΌχι"
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "heredity_details",
+      "label": "Κληρονομικότητα",
+      "field_type": "text",
+      "section": "family_status",
+      "required": false,
+      "is_active": true,
+      "order": 3
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "motor_development",
+      "label": "Κινητική Ανάπτυξη(Βάδισε ελεύθερα)",
+      "field_type": "text",
+      "section": "psychomotor",
+      "required": false,
+      "is_active": true,
+      "order": 1
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "speech_first_words",
+      "label": "Ομιλία - Πρώτες λέξεις",
+      "field_type": "text",
+      "section": "psychomotor",
+      "required": false,
+      "is_active": true,
+      "order": 2
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "speech_sentences",
+      "label": "Ομιλία - Σχηματισμός προτάσεων",
+      "field_type": "text",
+      "section": "psychomotor",
+      "required": false,
+      "is_active": true,
+      "order": 3
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "communication",
+      "label": "Επικοινωνία (με ομιλία, με την χρήση τεχνολογίας/άλλο:)",
+      "field_type": "text",
+      "section": "psychomotor",
+      "required": false,
+      "is_active": true,
+      "order": 4
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "sphincter_control",
+      "label": "Έλεγχος σφιγκτήρων - Εγκόπριση-ενούρηση",
+      "field_type": "text",
+      "section": "psychomotor",
+      "required": false,
+      "is_active": true,
+      "order": 5
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "menstruation",
+      "label": "Έμμηνος ρήση",
+      "field_type": "text",
+      "section": "psychomotor",
+      "required": false,
+      "is_active": true,
+      "order": 6
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "allergies",
+      "label": "Αλλεργίες",
+      "field_type": "text",
+      "section": "psychomotor",
+      "required": false,
+      "is_active": true,
+      "order": 7
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "sexual_education",
+      "label": "Σεξουαλική Διαπαιδαγώγηση",
+      "field_type": "text",
+      "section": "psychomotor",
+      "required": false,
+      "is_active": true,
+      "order": 8
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "epilepsy",
+      "label": "Κρίσεις Επιληψίας",
+      "field_type": "text",
+      "section": "psychomotor",
+      "required": false,
+      "is_active": true,
+      "order": 9
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "other_health_issues",
+      "label": "Άλλα προβλήματα (όραση, ακοή, λόγος, κινητικές δυσκολίες, κλπ)",
+      "field_type": "text",
+      "section": "psychomotor",
+      "required": false,
+      "is_active": true,
+      "order": 10
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "medication",
+      "label": "Φαρμακευτική αγωγή",
+      "field_type": "text",
+      "section": "psychomotor",
+      "required": false,
+      "is_active": true,
+      "order": 11
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "doctor",
+      "label": "Γιατρός",
+      "field_type": "text",
+      "section": "psychomotor",
+      "required": false,
+      "is_active": true,
+      "order": 12
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "preschool",
+      "label": "Προσχολική Αγωγή",
+      "field_type": "text",
+      "section": "education",
+      "required": false,
+      "is_active": true,
+      "order": 1
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "primary_school",
+      "label": "Δημοτικό",
+      "field_type": "text",
+      "section": "education",
+      "required": false,
+      "is_active": true,
+      "order": 2
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "high_school",
+      "label": "Γυμνάσιο",
+      "field_type": "text",
+      "section": "education",
+      "required": false,
+      "is_active": true,
+      "order": 3
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "lyceum",
+      "label": "Λύκειο",
+      "field_type": "text",
+      "section": "education",
+      "required": false,
+      "is_active": true,
+      "order": 4
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "special_education",
+      "label": "Σχολείο Ειδικής Αγωγής",
+      "field_type": "text",
+      "section": "education",
+      "required": false,
+      "is_active": true,
+      "order": 5
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "special_workshop",
+      "label": "Εργαστήριο Ειδικής Αγωγής",
+      "field_type": "text",
+      "section": "education",
+      "required": false,
+      "is_active": true,
+      "order": 6
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "other_education",
+      "label": "Άλλο (π.χ. όπως προγράμματα: εργοθεραπείας/ αισθητηριακής ολοκλήρωσης, λογοθεραπείας/πρώιμης παρέμβασης κ.τ.λ.)",
+      "field_type": "text",
+      "section": "education",
+      "required": false,
+      "is_active": true,
+      "order": 7
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "reading_skill",
+      "label": "Ανάγνωση",
+      "field_type": "text",
+      "section": "school_achievements",
+      "required": false,
+      "is_active": true,
+      "order": 1
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "writing_skill",
+      "label": "Γραφή",
+      "field_type": "text",
+      "section": "school_achievements",
+      "required": false,
+      "is_active": true,
+      "order": 2
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "math_skill",
+      "label": "Αριθμητική",
+      "field_type": "text",
+      "section": "school_achievements",
+      "required": false,
+      "is_active": true,
+      "order": 3
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "money_skill",
+      "label": "Χρήματα",
+      "field_type": "text",
+      "section": "school_achievements",
+      "required": false,
+      "is_active": true,
+      "order": 4
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "time_skill",
+      "label": "Ώρα",
+      "field_type": "text",
+      "section": "school_achievements",
+      "required": false,
+      "is_active": true,
+      "order": 5
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "dressing_skill",
+      "label": "Ντύσιμο-γδύσιμο",
+      "field_type": "text",
+      "section": "skills_behavior",
+      "required": false,
+      "is_active": true,
+      "order": 1
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "eating_skill",
+      "label": "Φαγητό",
+      "field_type": "text",
+      "section": "skills_behavior",
+      "required": false,
+      "is_active": true,
+      "order": 2
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "hygiene",
+      "label": "Ατομική καθαριότητα",
+      "field_type": "text",
+      "section": "skills_behavior",
+      "required": false,
+      "is_active": true,
+      "order": 3
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "toilet_skill",
+      "label": "Τουαλέτα",
+      "field_type": "text",
+      "section": "skills_behavior",
+      "required": false,
+      "is_active": true,
+      "order": 4
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "housework",
+      "label": "Συμμετοχή στις δουλειές του σπιτιού",
+      "field_type": "text",
+      "section": "skills_behavior",
+      "required": false,
+      "is_active": true,
+      "order": 5
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "shopping_money",
+      "label": "Κυκλοφορία – ψώνια – διαχείριση χρημάτων",
+      "field_type": "text",
+      "section": "skills_behavior",
+      "required": false,
+      "is_active": true,
+      "order": 6
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "social_behavior",
+      "label": "Συμπεριφορά/σχέσεις με τους άλλους",
+      "field_type": "text",
+      "section": "skills_behavior",
+      "required": false,
+      "is_active": true,
+      "order": 7
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "relationships",
+      "label": "Συντροφικές/Σεξουαλικές Σχέσεις",
+      "field_type": "text",
+      "section": "skills_behavior",
+      "required": false,
+      "is_active": true,
+      "order": 8
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "free_time_programs",
+      "label": "Ελεύθερος χρόνος (προγράμματα που παρακολουθεί)",
+      "field_type": "text",
+      "section": "skills_behavior",
+      "required": false,
+      "is_active": true,
+      "order": 9
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "free_time_home",
+      "label": "Ελεύθερος χρόνος (ενδιαφέροντα στο σπίτι/χαλάρωση)",
+      "field_type": "text",
+      "section": "skills_behavior",
+      "required": false,
+      "is_active": true,
+      "order": 10
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "kepa_decision",
+      "label": "Απόφαση ΚΕΠΑ",
+      "field_type": "text",
+      "section": "other_info",
+      "required": false,
+      "is_active": true,
+      "order": 1
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "eopyy_opinions",
+      "label": "Ιατρικές Γνωματεύσεις ΕΟΠΥΥ",
+      "field_type": "text",
+      "section": "other_info",
+      "required": false,
+      "is_active": true,
+      "order": 2
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "eopyy_expiry",
+      "label": "Λήξη Γνωματεύσεων ΕΟΠΥΥ",
+      "field_type": "date",
+      "section": "other_info",
+      "required": false,
+      "is_active": true,
+      "order": 3
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "kepa_expiry",
+      "label": "Λήξη απόφασης ΚΕΠΑ",
+      "field_type": "date",
+      "section": "other_info",
+      "required": false,
+      "is_active": true,
+      "order": 4
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "insurance_status",
+      "label": "Ασφαλιστική ικανότητα",
+      "field_type": "text",
+      "section": "other_info",
+      "required": false,
+      "is_active": true,
+      "order": 5
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "insurance_expiry",
+      "label": "Λήξη Ασφαλιστικής ικανότητας",
+      "field_type": "date",
+      "section": "other_info",
+      "required": false,
+      "is_active": true,
+      "order": 6
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "unemployment_card",
+      "label": "Κάρτα Ανεργίας",
+      "field_type": "text",
+      "section": "other_info",
+      "required": false,
+      "is_active": true,
+      "order": 7
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "welfare_benefit",
+      "label": "Προνοιακό επίδομα με ποσοστό αναπηρίας",
+      "field_type": "radio",
+      "section": "benefits",
+      "required": true,
+      "is_active": true,
+      "order": 1,
+      "choices": "Όχι\n67%\n80%\nΆλλο"
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "parent_pension",
+      "label": "Σύνταξη ασφαλισμένου συνταξιούχου γονέα (λόγω θανάτου)",
+      "field_type": "radio",
+      "section": "benefits",
+      "required": true,
+      "is_active": true,
+      "order": 2,
+      "choices": "Ναι\nΌχι"
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "comments",
+      "label": "Σχόλια - Παρατηρήσεις",
+      "field_type": "text",
+      "section": "comments",
+      "required": false,
+      "is_active": true,
+      "order": 1
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "social_worker",
+      "label": "Κοινωνικός λειτουργός",
+      "field_type": "text",
+      "section": "comments",
+      "required": false,
+      "is_active": true,
+      "order": 2
+    }
+  },
+  {
+    "model": "learners.formfield",
+    "fields": {
+      "name": "interdisciplinary_team",
+      "label": "Διεπιστημονική Ομάδα",
+      "field_type": "text",
+      "section": "comments",
+      "required": false,
+      "is_active": true,
+      "order": 3
+    }
+  }
+] 

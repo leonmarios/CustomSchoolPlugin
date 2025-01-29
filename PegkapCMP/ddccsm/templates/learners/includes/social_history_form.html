@@ -1,0 +1,87 @@
+{# Add this where you want the family members section to appear #}
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="card-title mb-0">{% trans "Οικογενειακή Κατάσταση" %}</h5>
+    </div>
+    <div class="card-body">
+        <div id="family-members">
+            {% for form in family_member_forms %}
+                <div class="family-member-form mb-4">
+                    <h6 class="mb-3">{% trans "Μέλος" %} {{ forloop.counter }}</h6>
+                    {% include "learners/includes/family_member_form.html" with form=form %}
+                    <button type="button" class="btn btn-danger btn-sm remove-member">
+                        <i class="bi bi-trash"></i> {% trans "Διαγραφή Μέλους" %}
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+        <button type="button" class="btn btn-success" id="add-member">
+            <i class="bi bi-plus-circle"></i> {% trans "Προσθήκη Μέλους" %}
+        </button>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="card-title mb-0">{% trans "Προνοιακά Επιδόματα" %}</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="form-group">
+                    <div id="div_id_welfare_disability" class="mb-3">
+                        <label for="id_welfare_disability" class="form-label">
+                            Προνοιακό επίδομα με ποσοστό αναπηρίας
+                        </label>
+                        <select name="welfare_disability" 
+                                class="form-control select form-select" 
+                                id="id_welfare_disability" 
+                                onchange="toggleOtherDisability()">
+                            <option value="">---------</option>
+                            <option value="no">Όχι</option>
+                            <option value="67">67%</option>
+                            <option value="80">80%</option>
+                            <option value="other">Άλλο</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-3" id="other-disability-div" style="display:none">
+                <div class="form-group">
+                    <div id="div_id_welfare_disability_other" class="mb-3">
+                        <label for="id_welfare_disability_other" class="form-label">
+                            Άλλο ποσοστό αναπηρίας
+                        </label>
+                        <input type="text" 
+                               name="welfare_disability_other" 
+                               maxlength="50" 
+                               class="form-control textinput" 
+                               id="id_welfare_disability_other">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleOtherDisability() {
+    var select = document.getElementById('id_welfare_disability');
+    var otherDiv = document.getElementById('other-disability-div');
+    
+    if (select && otherDiv) {
+        if (select.value === 'other') {
+            otherDiv.style.display = 'block';
+        } else {
+            otherDiv.style.display = 'none';
+            document.getElementById('id_welfare_disability_other').value = '';
+        }
+    }
+}
+
+// Run on page load
+document.addEventListener('DOMContentLoaded', function() {
+    toggleOtherDisability();
+});
+</script> 

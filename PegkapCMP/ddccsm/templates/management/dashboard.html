@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="h4">{% trans "Πίνακας Διαχείρισης" %}</h2>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Users Card -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Χρήστες" %}</h5>
+                    <p class="card-text">{% trans "Διαχείριση χρηστών και ρόλων" %}</p>
+                    <a href="{% url 'users:list' %}" class="btn btn-primary">
+                        {% trans "Διαχείριση Χρηστών" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Classes Card -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Τμήματα" %}</h5>
+                    <p class="card-text">{% trans "Διαχείριση τμημάτων" %}</p>
+                    <a href="{% url 'classes:list' %}" class="btn btn-primary">
+                        {% trans "Διαχείριση Τμημάτων" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assignments Card -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Αναθέσεις" %}</h5>
+                    <p class="card-text">{% trans "Ανάθεση τμημάτων σε εκπαιδευτικούς" %}</p>
+                    <a href="{% url 'classes:teacher_assignment_list' %}" class="btn btn-primary">
+                        {% trans "Διαχείριση Αναθέσεων" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Learners Card -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Ωφελούμενοι" %}</h5>
+                    <p class="card-text">{% trans "Διαχείριση ωφελούμενων" %}</p>
+                    <a href="{% url 'learners:list' %}" class="btn btn-primary">
+                        {% trans "Διαχείριση Ωφελούμενων" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{% trans "Στατιστικά Στοιχεία" %}</h5>
+                    <div class="row g-4">
+                        <div class="col-md-3">
+                            <div class="border rounded p-3 text-center">
+                                <h6>{% trans "Ενεργοί Χρήστες" %}</h6>
+                                <h3>{{ active_users_count }}</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="border rounded p-3 text-center">
+                                <h6>{% trans "Τμήματα" %}</h6>
+                                <h3>{{ classes_count }}</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="border rounded p-3 text-center">
+                                <h6>{% trans "Ωφελούμενοι" %}</h6>
+                                <h3>{{ learners_count }}</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="border rounded p-3 text-center">
+                                <h6>{% trans "Εκκρεμείς Αξιολογήσεις" %}</h6>
+                                <h3>{{ pending_evaluations_count }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Κοινωνικό Ιστορικό" %}{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h2 class="h4">{% trans "Κοινωνικό Ιστορικό" %}</h2>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <!-- Debug Information -->
+        <div class="alert alert-warning mb-4">
+            <h5>Debug Info:</h5>
+            <pre>{{ debug_info|pprint }}</pre>
+            <hr>
+            <h5>Form Fields:</h5>
+            <pre>{{ form.fields.keys|pprint }}</pre>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <!-- Basic Information Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="h5 mb-0">{% trans "Βασικές Πληροφορίες" %}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.status.label }}</label>
+                            {{ form.status }}
+                            {% if form.status.errors %}
+                                <div class="text-danger">{{ form.status.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.arrival_date.label }}</label>
+                            {{ form.arrival_date }}
+                            {% if form.arrival_date.errors %}
+                                <div class="text-danger">{{ form.arrival_date.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Information Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="h5 mb-0">{% trans "Πληροφορίες Ομάδας" %}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.rv_team.label }}</label>
+                            {{ form.rv_team }}
+                            {% if form.rv_team.errors %}
+                                <div class="text-danger">{{ form.rv_team.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">{{ form.interdisciplinary_team.label }}</label>
+                            {{ form.interdisciplinary_team }}
+                            {% if form.interdisciplinary_team.errors %}
+                                <div class="text-danger">{{ form.interdisciplinary_team.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="h5 mb-0">{% trans "Σχόλια" %}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label class="form-label">{{ form.comments.label }}</label>
+                            {{ form.comments }}
+                            {% if form.comments.errors %}
+                                <div class="text-danger">{{ form.comments.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">{% trans "Αποθήκευση" %}</button>
+                <a href="{% url 'learners:list' %}" class="btn btn-secondary">{% trans "Ακύρωση" %}</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% block extra_css %}
+<style>
+    select.form-control,
+    input.form-control,
+    textarea.form-control {
+        display: block;
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    
+    .card-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid rgba(0,0,0,.125);
+    }
+</style>
+{% endblock %}
+
+{% endblock %} 

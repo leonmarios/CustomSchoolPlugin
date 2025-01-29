@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}ΚΔΑΠ-ΜΕΑ - Αρχική{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+    <h1 class="display-4">Καλώς ήρθατε στο ΚΔΑΠ-ΜΕΑ</h1>
+    <p class="lead">Σύστημα Διαχείρισης Ωφελούμενων</p>
+    
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Ωφελούμενοι</h5>
+                    <p class="card-text">Διαχείριση ωφελούμενων και των στοιχείων τους</p>
+                    <a href="/learners/" class="btn btn-primary">Μετάβαση</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <i class="fas fa-chalkboard-teacher fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Τμήματα</h5>
+                    <p class="card-text">Διαχείριση τμημάτων και προγραμμάτων</p>
+                    <a href="/classes/" class="btn btn-primary">Μετάβαση</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

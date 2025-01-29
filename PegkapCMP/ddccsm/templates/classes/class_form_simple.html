@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">
+                {% if form.instance.pk %}
+                    Επεξεργασία {{ form.instance.name }}
+                {% else %}
+                    Νέο Τμήμα
+                {% endif %}
+            </h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <!-- Basic form fields -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        {{ form.name|as_crispy_field }}
+                        {{ form.description|as_crispy_field }}
+                        {{ form.is_active|as_crispy_field }}
+                    </div>
+                </div>
+                
+                <!-- Schedule Table -->
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Ώρα</th>
+                                {% for day_id, day_name in weekdays %}
+                                    <th>{{ day_name }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in schedule_grid %}
+                                <tr>
+                                    <td>{{ row.time }}</td>
+                                    {% for slot in row.slots %}
+                                        <td>
+                                            <input type="text" 
+                                                   name="schedule-{{ slot.day_id }}-{{ slot.time_slot }}"
+                                                   class="form-control form-control-sm"
+                                                   value="{{ slot.activity }}"
+                                                   placeholder="Δραστηριότητα">
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Form buttons -->
+                <div class="mt-4">
+                    <a href="{% url 'classes:list' %}" class="btn btn-secondary">Επιστροφή</a>
+                    <button type="submit" class="btn btn-primary">Αποθήκευση</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="h4">
+                {% if form.instance.pk %}
+                    {% trans "Επεξεργασία Αξιολόγησης" %}
+                {% else %}
+                    {% trans "Νέα Αξιολόγηση" %}
+                {% endif %}
+            </h2>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if field.help_text %}
+                        <div class="form-text">{{ field.help_text }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        {% trans "Αποθήκευση" %}
+                    </button>
+                    {% if view.kwargs.learner_id %}
+                        <a href="{% url 'learners:detail' view.kwargs.learner_id %}" class="btn btn-outline-secondary">
+                    {% else %}
+                        <a href="{% url 'learners:detail' object.learner.pk %}" class="btn btn-outline-secondary">
+                    {% endif %}
+                        {% trans "Ακύρωση" %}
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 
