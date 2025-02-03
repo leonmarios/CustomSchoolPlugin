@@ -479,6 +479,11 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <img src="{% static 'images/placeholder.png' %}" alt="Photo placeholder" class="img-thumbnail" style="width: 150px; height: 150px;">
+                                <div><button type="button" id="remove-photo-button" 
+                    class="btn btn-danger btn-sm ms-2" 
+                    style="display: {% if form.instance.photo %}inline-block{% else %}none{% endif %};">
+                <i class="fas fa-minus"></i>
+            </button></div>
                                 {{ form.photo_placeholder }}
                             </div>
 
@@ -1047,7 +1052,6 @@ function addGuardianEmailField(button) {
 }
 
 function addSiblingNameField(button) {
-    console.log('addSiblingNameField');
     const container = button.closest('.form-group');
     const siblingFields = container.querySelectorAll('input[name^="sibling_name"]');
     
@@ -1255,38 +1259,67 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle photo preview
     const photoInput = document.querySelector('input[name="photo"]');
     const photoPlaceholder = document.querySelector('input[name="photo_placeholder"]');
-    
+
     if (photoInput && photoPlaceholder) {
-        // Create preview container and image element
+        // Create preview container
         const previewContainer = document.createElement('div');
-        previewContainer.className = 'photo-preview-container';
+        previewContainer.className = 'photo-preview-container d-flex align-items-center';
+
+        // Create image element
         const previewImg = document.createElement('img');
-        previewImg.className = 'photo-preview';
+        previewImg.className = 'photo-preview img-thumbnail';
+        previewImg.style.width = "150px";
+        previewImg.style.height = "150px";
+
+        // Create remove button
+        const removeButton = document.createElement('button');
+        removeButton.className = 'btn btn-danger btn-sm ms-2';
+        removeButton.innerHTML = '<i class="fas fa-minus"></i>';
+        removeButton.style.display = "none"; // Initially hidden
+
+        // Append elements
         previewContainer.appendChild(previewImg);
-        
+        previewContainer.appendChild(removeButton);
+
         // Replace placeholder with preview container
         photoPlaceholder.parentElement.replaceWith(previewContainer);
-        
-        // Show existing photo if any
+
+        // Show existing photo if available
         {% if form.instance.photo %}
             previewImg.src = "{{ form.instance.photo.url }}";
             previewImg.classList.add('has-image');
+            removeButton.style.display = "inline-block"; // Show remove button if photo exists
         {% endif %}
-        
-        // Update preview when new photo is selected
-        photoInput.addEventListener('change', function() {
+
+        // Handle new photo selection
+        photoInput.addEventListener('change', function () {
             if (this.files && this.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     previewImg.src = e.target.result;
                     previewImg.classList.add('has-image');
+                    removeButton.style.display = "inline-block"; // Show remove button
                 };
                 reader.readAsDataURL(this.files[0]);
             } else {
                 previewImg.src = '';
                 previewImg.classList.remove('has-image');
+                removeButton.style.display = "none"; // Hide remove button if no image
             }
         });
+
+        // Handle remove button click
+        removeButton.addEventListener('click', function (event) {
+    event.preventDefault(); // ✅ Prevent form submission
+    event.stopPropagation(); // ✅ Stop bubbling events from reaching the form
+
+
+    // Reset the image to placeholder
+    previewImg.src = "{% static 'images/placeholder.png' %}";
+    previewImg.classList.remove('has-image');
+    removeButton.style.display = "none";
+    photoInput.value = ""; // Clear input file selection
+});
     }
 });
 
@@ -1311,5 +1344,6 @@ $(document).ready(function() {
         firstDay: 1
     });
 });
+
 </script>
 {% endblock %} 
