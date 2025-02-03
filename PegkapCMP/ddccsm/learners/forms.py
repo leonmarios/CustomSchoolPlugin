@@ -352,8 +352,10 @@ class LearnerForm(forms.ModelForm):
         label=_('Επίδομα αναπηρίας'),
         choices=[
             ('', _('Επιλέξτε')),  # Added default option
-            ('yes', _('Ναι')),
             ('no', _('Όχι')),
+            ('67%', _('67%')),
+            ('80%', _('80%')),
+            ('other', _('Άλλο')),
         ],
         required=False,
         widget=forms.Select(attrs={'class': 'form-control'})
