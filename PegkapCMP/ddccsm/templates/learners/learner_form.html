@@ -757,7 +757,8 @@
                         <!-- Add the family members form here -->
                         <div class="card mt-4" id="family-members-section">
                             <div class="card-header d-flex justify-content-between align-items-center">
-                                <button type="button" class="btn btn-sm btn-success add-family-member" id="main-add-button">
+                                <button type="button" class="btn btn-sm btn-success add-family-member" id="main-add-button" 
+                                onclick="addFamilyMember()">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
@@ -1046,6 +1047,7 @@ function addGuardianEmailField(button) {
 }
 
 function addSiblingNameField(button) {
+    console.log('addSiblingNameField');
     const container = button.closest('.form-group');
     const siblingFields = container.querySelectorAll('input[name^="sibling_name"]');
     
